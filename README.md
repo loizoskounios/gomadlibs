@@ -2,6 +2,34 @@
 
 A very simple implementation of MadLibs written in Go using only the standard library.
 
+## Building
+
+Bind-mount this directory inside a Docker container running a `golang` image, and run `go build`. The resulting binary will be stored in this directory.
+
+```shell
+docker run --rm \
+  --volume "$(pwd)":/gomadlibs \
+  --user $(id -u "$USER"):$(id -g "$USER") \
+  --workdir /gomadlibs \
+  golang:1.11.1-stretch \
+  go build
+```
+
+Additional environment variables can be provided to perform cross-platform builds. For example, this will generate a binary for amd64 Windows.
+
+```shell
+docker run --rm \
+  --volume "$(pwd)":/gomadlibs \
+  --user $(id -u "$USER"):$(id -g "$USER") \
+  --workdir /gomadlibs \
+  --env GOOS=windows \
+  --env GOARCH=amd64 \
+  golang:1.11.1-stretch \
+  go build
+```
+
+**NOTE:** If you encounter the warning `go: disabling cache (/.cache/go-build) due to initialization failure: mkdir /.cache: permission denied` during a build, it is a known issue. It occurs when the UID of the user that is running the container does not exist inside the container. In such a case, Docker sets `$HOME` to `/` and the Go compiler cannot write to `/.cache` since the process is not running as root. More details [here](https://go-review.googlesource.com/c/go/+/122487).
+
 ## Running
 
 ```shell
