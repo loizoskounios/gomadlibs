@@ -32,25 +32,29 @@ docker run --rm \
 
 ## Running
 
-```shell
-go run main.go
+The application reads a template and asks the user for input via `stdin`.
+The user's answers are then plugged into the template and printed on `stdout`. 
 
-# or
+```text
+$ ./gomadlibs -help
+Usage of gomadlibs:
+  -help
+        show this help message
+  -stories-dir string
+        where the app will look for story templates (default "./stories")
+  -verify-integrity
+        verifies the integrity of the story template
 
-go build main.go
-./main
-
-# or
-
-go install
-gomadlibs # With $GOBIN in $PATH
+Examples:
+    gomadlibs story1.mdlb
+    gomadlibs /home/user/stories/astory.mdlb
+    gomadlibs -verify-integrity story2.mdlb
+    gomadlibs -stories-dir mystories astory.mdlb
 ```
 
 ## Story Templates
 
 Two example story templates are provided in the `./stories` directory.
-The application reads a template and asks the user for input via `stdin`.
-The user's answers are then plugged into the template and printed on `stdout`. 
 Unless a path to a template is explicitly provided, the app will look for files ending in `*.mdlb` in the default stories directory (`./stories`) and choose a random one if any are available.
 
 ### Template Format

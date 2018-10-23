@@ -172,7 +172,7 @@ func init() {
 }
 
 func main() {
-	fs := flag.NewFlagSet("cli", flag.ExitOnError)
+	fs := flag.NewFlagSet("gomadlibs", flag.ExitOnError)
 
 	var verifyIntegrity bool
 	fs.BoolVar(&verifyIntegrity, "verify-integrity", false, "verifies the integrity of the story template")
@@ -187,13 +187,13 @@ func main() {
 	fs.Parse(args)
 
 	if help {
-		logger.Println("Usage of cli:")
+		logger.Println("Usage of gomadlibs:")
 		fs.PrintDefaults()
 		logger.Println("\nExamples:")
-		logger.Println("\tgo run main.go story1.mdlb")
-		logger.Println("\tgo run main.go /home/user/stories/astory.mdlb")
-		logger.Println("\tgo run main.go -verify-integrity story2.mdlb")
-		logger.Println("\tgo run main.go -stories-dir mystories astory.mdlb")
+		logger.Println("\tgomadlibs story1.mdlb")
+		logger.Println("\tgomadlibs /home/user/stories/astory.mdlb")
+		logger.Println("\tgomadlibs -verify-integrity story2.mdlb")
+		logger.Println("\tgomadlibs -stories-dir mystories astory.mdlb")
 		os.Exit(0)
 	}
 
