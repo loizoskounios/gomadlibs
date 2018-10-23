@@ -55,7 +55,7 @@ Examples:
 ## Story Templates
 
 Two example story templates are provided in the `./stories` directory.
-Unless a path to a template is explicitly provided, the app will look for files ending in `*.mdlb` in the default stories directory (`./stories`) and choose a random one if any are available.
+Unless a path to a template is explicitly provided, the app will look for files ending in `.mdlb` in the default stories directory (`./stories`) and choose a random one if any are available.
 
 ### Template Format
 
@@ -79,7 +79,7 @@ The blanks in the story are denoted by 5 underscore symbols (`_____`). There mus
 
 Line-separated, case-sensitive descriptions of what should go in each blank spot in the story. The second blank in the story is associated with the second line in the descriptions and so forth. Numbers should be used to differentiate between different adjectives, nouns, etc (e.g., `Noun 1`, `Noun 2`).
 
-## Example
+#### Example
 
 ```text
 Hi, John. My name is Jack. So, John, I need to talk to you about something.
@@ -104,7 +104,7 @@ Note how `Name of Person 1` is used both as the first and third description, mat
 We can save this in `./stories/example.mdlb` and load it by passing its name as the first argument to our application:
 
 ```text
-$ go run main.go example.mdlb
+$ ./gomadlibs example.mdlb
 Template at 'stories/example.mdlb' has 4 blanks and 4 descriptions
 
 ----------
