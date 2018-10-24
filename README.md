@@ -78,11 +78,11 @@ GOOS=windows GOARCH=amd64 go build
 
 ## Usage
 
-The application reads a template and asks the user for input via `stdin`.
-The user's answers are then plugged into the template and printed on `stdout`. 
+The application provides a simple CLI for playing a round of MadLibs.
+When the application starts up, it reads and parses a story template and asks the user for input via `stdin`.
+The user's answers are then plugged into the template and printed to `stdout`.
 
 ```text
-$ ./gomadlibs -help
 Usage of gomadlibs:
   -help
         show this help message
@@ -98,10 +98,27 @@ Examples:
     gomadlibs -stories-dir mystories astory.mdlb
 ```
 
+### Example Round
+
+Assuming that we have a small `example.mdlb` story template in the default stories directory and we run the app inside a Docker container:
+
+```text
+$ docker run --rm -it loizoskounios/gomadlibs example.mdlb
+Template at 'stories/example.mdlb' has 4 blanks and 4 descriptions
+
+----------
+Name of Person: Mary
+Noun: something
+Name of Person: Jane
+
+Let's Have a Talk
+----------
+Hi, Mary. My name is Jane. So, Mary, I need to talk to you about something.
+```
+
 ## Story Templates
 
-Two example story templates are provided in the `./stories` directory.
-Unless a path to a template is explicitly provided, the app will look for files ending in `.mdlb` in the default stories directory (`./stories`) and choose a random one if any are available.
+Two example story templates are provided in the `stories` directory.
 
 ### Template Format
 
@@ -125,7 +142,7 @@ The blanks in the story are denoted by 5 underscore symbols (`_____`). There mus
 
 Line-separated, case-sensitive descriptions of what should go in each blank spot in the story. The second blank in the story is associated with the second line in the descriptions and so forth. Numbers should be used to differentiate between different adjectives, nouns, etc (e.g., `Noun 1`, `Noun 2`).
 
-#### Example
+### Creating a Story Template
 
 ```text
 Hi, John. My name is Jack. So, John, I need to talk to you about something.
@@ -145,20 +162,37 @@ Name of Person 1
 Noun 1
 ```
 
-Note how `Name of Person 1` is used both as the first and third description, matching the first and third blanks of our story. When the user is asked to provided answers, they are only asked about unique descriptions.
+Note how `Name of Person 1` is used both as the first and third description, matching the first and third blanks of our story. When the user is asked to provided answers, they are only asked about unique descriptions. The template should be saved with a `.mdlb` extension.
 
-We can save this in `./stories/example.mdlb` and load it by passing its name as the first argument to our application:
+### Making Story Templates Available
 
-```text
-$ ./gomadlibs example.mdlb
-Template at 'stories/example.mdlb' has 4 blanks and 4 descriptions
+There are two methods in which we can make story templates available to the app:
 
-----------
-Name of Person: Mary
-Noun: something
-Name of Person: Jane
+1. Add them to the stories directory (default: `./stories`)
+2. Use an absolute path to the story template as the first argument
 
-Let's Have a Talk
-----------
-Hi, Mary. My name is Jane. So, Mary, I need to talk to you about something.
+Using method 1, we simply save our story template inside the stories directory (e.g., `./stories/newstory.mdlb`). If we run the app with no arguments, one story template will be randomly chosen and `newstory.mdlb` will be amongst the candidates. If we want to specifically play a round using the `newstory.mdlb` template, we use `newstory.mdlb` as the first argument to the app. Note that we're not using the full path to the story template (i.e., `./stories/newstory.mdlb`). Also note that the story directory is a variable that can be overriden using the `-stories-dir` flag. So it is possible to maintain multiple story templates in different directories and use the `-stories-dir` flag to determine which set of stories is used.
+
+Using method 2, all we need to do is use an absolute path to the story template as the first argument to the app. In such a case, the stories directory is not considered.
+
+#### Story Templates in Docker
+
+If you are using Docker to run the app and want to add your own story templates, you need to mount the host directory (or Docker volume) holding your story templates inside the container.
+
+To replace the provided story templates with your own, use:
+
+```shell
+docker run --rm \
+  -it \
+  --volume /path/to/dir/holding/stories:/gomadlibs/stories \
+  loizoskounios/gomadlibs mystory.mdlb
+```
+
+Alternatively, mount your stories directory to a different location and use the `-stories-dir` flag to tell the app to use those stories instead
+
+```shell
+docker run --rm \
+  -it \
+  --volume /path/to/dir/holding/stories:/mystories \
+  loizoskounios/gomadlibs -stories-dir /mystories mystory.mdlb
 ```
