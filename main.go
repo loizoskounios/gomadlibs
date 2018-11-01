@@ -49,7 +49,7 @@ func (ab AnswerBook) Fill() {
 
 func getMessageForUser(s string) string {
 	ss := strings.Split(s, " ")
-	ss = ss[:len(ss) - 1]  // Reslice without last element (i.e., number)
+	ss = ss[:len(ss)-1] // Reslice without last element (i.e., number)
 	s = strings.Join(ss, " ")
 	s = s + ": "
 
@@ -84,7 +84,7 @@ func NewAnswerBook(descriptions []string) AnswerBook {
 
 func shuffleDescriptions(descriptions []string) {
 	rand.Shuffle(len(descriptions), func(i, j int) {
-	    descriptions[i], descriptions[j] = descriptions[j], descriptions[i]
+		descriptions[i], descriptions[j] = descriptions[j], descriptions[i]
 	})
 }
 
@@ -197,7 +197,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	rargs := args[len(args) - fs.NArg():]
+	rargs := args[len(args)-fs.NArg():]
 	if verifyIntegrity && len(rargs) == 0 {
 		logger.Println("Path to story template must be provided with the '-verify-integrity' flag")
 		os.Exit(0)
